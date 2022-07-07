@@ -1,0 +1,156 @@
+﻿@model IEnumerable<AttendanceApp.Models.Attendance>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string EndHour="",Day="";
+   }           
+
+   <!--
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayName("Picture")
+            </th>
+            <th>
+                @Html.DisplayName("Name")
+            </th>
+            <th>
+                @Html.DisplayName("Day")
+            </th>
+           
+            <th>
+                @Html.DisplayName("Check Out")
+            </th>
+            
+            <th>
+                @Html.DisplayName("Location")
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            <tr>
+                    <td>
+                       @if (item.Employee.ProfilePicture != null)
+                           {            
+                  <img class="rounded-circle" style="width:80px;height:80px" src="data:image/*;base64,
+                                @(Convert.ToBase64String(item.Employee.ProfilePicture))" alt="">
+                        }
+                        else{
+                            <img class="rounded-circle" src="~/Images/user.png" alt="" style="width:80px;height:80px">
+                        }
+
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee.FirstName)
+                    @Html.DisplayFor(modelItem => item.Employee.LastName)
+
+                    </td>
+            <td>
+                @Day @item.Day.ToString("dddd, dd MMMM yyyy")
+                @Html.DisplayName(Day)
+            </td>
+            <td>
+                @if (item.EndHour != null)
+                {
+                    EndHour=$"{item.EndHour?.Hours%12}:{(item.EndHour?.Minutes<10?"0":"")}{item.EndHour?.Minutes} {(item.EndHour?.Hours/12>0?"PM":"AM")}";
+                    @Html.DisplayName(EndHour);
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkFrom)
+            </td>
+            
+        </tr>
+}
+    </tbody>
+</table>
+-->
+<p>
+    @Model.FirstOrDefault()?.Day.ToString("dddd, dd MMMM yyyy")
+</p>
+@foreach (var item in Model) {
+    <div class="card">
+         <h6 class="col-6">
+                 @if (item.EndHour != null){
+                EndHour=$"{item.EndHour?.Hours%12}:{(item.EndHour?.Minutes<10?"0":"")}{item.EndHour?.Minutes} {(item.EndHour?.Hours/12>0?"PM":"AM")}";
+               if(item.EndHour?.Hours<DateTime.Now.Hour ||(item.EndHour?.Hours==DateTime.Now.Hour&& item.EndHour?.Minutes<DateTime.Now.Minute))
+               {
+                <span class="text-danger">
+                    Not<br/>available<br/>
+                    @Html.DisplayName(EndHour)
+                    </span>
+                }
+                else
+                {
+                    <span class="text-success">
+                        available<br/>
+                    @Html.DisplayName(EndHour)
+                    </span>
+                }
+            }
+            else
+            {
+                <span class="text-success">
+                    available
+                </span>
+                
+            }
+    </h6>
+    @if (item.Employee.ProfilePicture != null)
+                           {            
+                  <img class="rounded-circle mt-5" style="width:100px;height:100px" src="data:image/*;base64,
+                                @(Convert.ToBase64String(item.Employee.ProfilePicture))" alt="">
+                        }
+                        else{
+                            <img class="rounded-circle mt-5" src="~/Images/user.png" alt="" style="width:100px;height:100px">
+                        }
+    <h4>
+    @Html.DisplayFor(modelItem => item.Employee.FirstName)
+                    @Html.DisplayFor(modelItem => item.Employee.LastName)
+    </h4>
+    <p>
+        <i data-feather="award" class="text-success" style="width:18px"> </i> 
+        @Html.DisplayFor(modelItem => item.Employee.Position)
+   </p>
+   <p>
+        <i data-feather="map-pin" class="text-danger" style="width:15px"></i>
+@Html.DisplayFor(modelItem => item.WorkFrom)</p>   
+   
+    </div>
+    
+    }
+  <script>  
+function IsAvailable(endHour) {
+    const [date, time] = formatDate(new Date()).split(' ');
+
+    timeInput.value = time;
+}
+// 👇️👇️👇️ Format Date as yyyy-mm-dd hh:mm:ss
+// 👇️ (Helper functions)
+function padTo2Digits(num) {
+  return num.toString().padStart(2, '0');
+}
+
+function formatDate(date) {
+  return (
+    [
+      date.getFullYear(),
+      padTo2Digits(date.getMonth() + 1),
+      padTo2Digits(date.getDate()),
+    ].join('-') +
+    ' ' +
+    [
+      padTo2Digits(date.getHours()),
+      padTo2Digits(date.getMinutes()),
+      // padTo2Digits(date.getSeconds()),  // 👈️ can also add seconds
+    ].join(':')
+  );
+}
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

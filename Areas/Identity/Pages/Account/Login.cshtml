@@ -1,0 +1,47 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+<div class="container mt-5">
+	
+	<div class="screen">
+		<div class="screen__content">
+			
+			<form class="logInForm" id="account" method="post">
+				<div asp-validation-summary="ModelOnly" class="text-warning text-error"></div>
+				<div class="logInForm__field">
+					<i class="logInForm__icon fas fa-user"></i>
+					<input type="text" class="form__input form__inputEmail" asp-for="Input.Email" aria-required="true" placeholder="User name / Email">
+				              <br/>  <span asp-validation-for="Input.Email" class="text-warning text-error"></span>
+				</div>
+				<div class="logInForm__field">
+					<i class="logInForm__icon fas fa-lock"></i>
+					<input type="password" asp-for="Input.Password"autocomplete="current-password" aria-required="true" class="form__input" placeholder="Password">
+								<br/>  <span asp-validation-for="Input.Password" class="text-warning text-error"></span>
+
+				</div>
+				 <p >
+                        <a class="text-info" id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                    </p>
+				<button class="button form__submit" id="login-submit" type="submit">
+					<span class="button__text" >Log In Now</span>
+					<i class="button__icon fas fa-chevron-right"></i>
+				</button>	
+               
+			</form>
+			
+		</div>
+		<div class="screen__background">
+			
+			<span class="screen__background__shape screen__background__shape4"></span>
+			<span class="screen__background__shape screen__background__shape3"></span>		
+			<span class="screen__background__shape screen__background__shape2"></span>
+			<span class="screen__background__shape screen__background__shape1"></span>
+		</div>		
+	</div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

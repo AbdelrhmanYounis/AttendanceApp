@@ -1,0 +1,96 @@
+﻿@model AttendanceApp.Models.Attendance
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+     var user = UserManager.GetUserAsync(User).Result;
+    string roleName =(user!=null)? UserManager.GetRolesAsync(user).Result.FirstOrDefault():"";
+
+}
+
+<h1>Edit</h1>
+
+<h4>Attendance</h4>
+<hr />
+<div class="row">
+    <div class="col-12">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AttendanceId" /> 
+            @if (roleName.Equals("Admin"))
+            {
+                <div class="form-group">
+                    <label asp-for="EmployeeId" class="control-label"></label>
+                <select asp-for="EmployeeId" class="form-control" asp-items="ViewBag.EmployeeId"></select>
+                <span asp-validation-for="EmployeeId" class="text-danger"></span>
+            </div>
+            }
+            <div class="form-group">
+                <label asp-for="Day" class="control-label"></label>
+                <input asp-for="Day" class="form-control" type="date"/>
+                <span asp-validation-for="Day" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartHour" class="control-label"></label>
+                <input asp-for="StartHour" class="form-control"type="time" />
+                <span asp-validation-for="StartHour" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndHour" class="control-label"></label>
+                <input asp-for="EndHour" class="form-control" type="time" id="time"/>
+                    <i data-feather="pen-tool" onclick="getTime()" style="width:100%;cursor:pointer" ></i>
+                <span asp-validation-for="EndHour" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkFrom" class="control-label"></label>
+                <select  asp-for="WorkFrom"  asp-items="Html.GetEnumSelectList<WorkFrom>()" class="form-control"></select>
+                <span asp-validation-for="WorkFrom" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Comment" class="control-label"></label>
+                <input asp-for="Comment" class="form-control" />
+                <span asp-validation-for="Comment" class="text-danger"></span>
+            </div>
+            
+            <div class="form-group mt-4">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index"class="btn btn-secondary" >Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function getTime() {
+    const [date, time] = formatDate(new Date()).split(' ');
+
+    // ✅ Set time input value
+    const timeInput = document.getElementById('time');
+    timeInput.value = time;
+}
+// 👇️👇️👇️ Format Date as yyyy-mm-dd hh:mm:ss
+// 👇️ (Helper functions)
+function padTo2Digits(num) {
+  return num.toString().padStart(2, '0');
+}
+
+function formatDate(date) {
+  return (
+    [
+      date.getFullYear(),
+      padTo2Digits(date.getMonth() + 1),
+      padTo2Digits(date.getDate()),
+    ].join('-') +
+    ' ' +
+    [
+      padTo2Digits(date.getHours()),
+      padTo2Digits(date.getMinutes()),
+      // padTo2Digits(date.getSeconds()),  // 👈️ can also add seconds
+    ].join(':')
+  );
+}
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,76 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+<partial name="_StatusMessage" for="StatusMessage" />
+        <form id="profile-form" method="post" enctype="multipart/form-data">
+            <div class="row">
+    <div class="col-12 col-md-6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.Email" class="form-label"></label>
+                <input asp-for="Input.Email" class="form-control"/>                
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Username" class="form-label"></label>
+                <input asp-for="Input.Username" class="form-control"/>                
+                <span asp-validation-for="Input.Username" class="text-danger"></span>
+
+            </div>
+             <div class="form-group">
+                 <label asp-for="Input.FirstName" class="form-label"></label>
+                <input asp-for="Input.FirstName" class="form-control" />                
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+             <div class="form-group">
+                 <label asp-for="Input.LastName" class="form-label"></label>
+                <input asp-for="Input.LastName" class="form-control" />                
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                 <label asp-for="Input.Position" class="form-label"></label>
+                <input asp-for="Input.Position" class="form-control" />                
+                <span asp-validation-for="Input.Position" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                
+                <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+           
+    </div>
+    <div class="col-12 col-md-3 mt-4">
+        <div class="form-group row">
+                @if (Model.Input.ProfilePicture != null)
+                {
+                <img id="profilePicture" alt="profile" class="col-12 profile-picture-edit" src="data:image/*;base64,@(Convert.ToBase64String(Model.Input.ProfilePicture))" />
+                }
+                else
+                {
+                    <img id="profilePicture" alt="profile" class="col-12 profile-picture-edit" src="~/images/user.png" />
+                }
+              
+                <div class="custom-file mt-2">
+                    <input type="file"
+                           accept="image/*"
+                           asp-for="Input.ProfilePicture"
+                           class="custom-file-input col-12"
+                           onchange="document.getElementById('profilePicture').src = window.URL.createObjectURL(this.files[0])" />
+                    <span asp-validation-for="Input.ProfilePicture" class="text-danger"></span>
+                </div>
+                </div>
+        </div>
+</div>
+ <div class="form-group mt-4">
+            <button id="update-profile-button" type="submit" class="btn btn-primary px-5">Save</button> 
+            </div>
+        </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
